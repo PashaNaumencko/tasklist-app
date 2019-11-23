@@ -1,0 +1,2 @@
+export const FETCH_TASKS = 'FETCH_TASKS';
+export const FETCH_TASKS_LOADING = 'FETCH_TASKS_LOADING';

@@ -13,7 +13,7 @@ export const fetchTasksRequest = (filter) => async (dispatch) => {
   dispatch(fetchTasks.request());
   const { status, message } = await taskService.getTasks(filter);
   if (status === 'ok') {
-    dispatch(fetchTasks.success(message));
+    dispatch(fetchTasks.success({ ...message, page: filter.page }));
   } else {
     dispatch(fetchTasks.failure(message));
   }

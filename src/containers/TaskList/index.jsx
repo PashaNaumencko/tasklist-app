@@ -41,7 +41,7 @@ class TaskList extends React.Component {
   };
 
   onPaginationChange = (event, { activePage }) => {
-    this.setState({ activePage});
+    this.setState({ activePage });
     this.props.fetchTasksRequest({ page: activePage });
   };
 

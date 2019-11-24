@@ -18,7 +18,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         tasks: action.payload.tasks,
-        totalTaskCount: action.payload.total_task_count
+        totalTaskCount: action.payload.total_task_count,
+        page: action.payload.page,
       };
     case fetchTasks.FAILURE:
       return {

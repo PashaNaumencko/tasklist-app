@@ -1,9 +1,10 @@
 import * as queryString from 'query-string';
 
 function getFetchUrl(args) {
+  const developer = 'Pavlo';
   const apiUrl = 'https://uxcandy.com/~shapoval/test-task-backend/v2';
   return (
-    apiUrl + args.endpoint + (args.query ? `/?developer=Pavlo&${queryString.stringify(args.query)}` : '')
+    apiUrl + args.endpoint + (args.query ? `/?${queryString.stringify({ ...args.query, developer })}` : `/?developer=${developer}`)
   );
 }
 
@@ -23,7 +24,10 @@ function getFetchArgs(args) {
     }
     headers['Content-Type'] = 'multipart/form-data';
     const formData = new FormData();
-    Object.keys(args.request).forEach((arg) => formData.append(arg, args.request[arg]));
+    Object.keys(args.request).forEach((arg) => {
+      console.log(arg, args.request[arg]);
+      formData.append(`${arg}`, `${args.request[arg]}`);
+    });
     body = formData;
   }
   return {

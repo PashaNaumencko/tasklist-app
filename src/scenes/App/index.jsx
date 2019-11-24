@@ -4,10 +4,10 @@ import { Provider } from 'react-redux';
 import MainContainer from 'src/containers/MainContainer';
 import store from 'src/store';
 
-const Home = () => (
+const App = () => (
   <Provider store={store}>
     <MainContainer />
   </Provider>
 );
 
-export default Home;
+export default App;

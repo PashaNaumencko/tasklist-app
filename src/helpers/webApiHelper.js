@@ -1,8 +1,9 @@
 import * as queryString from 'query-string';
 
 function getFetchUrl(args) {
+  const apiUrl = 'https://uxcandy.com/~shapoval/test-task-backend/v2';
   return (
-    args.endpoint + (args.query ? `?${queryString.stringify(args.query)}` : '')
+    apiUrl + args.endpoint + (args.query ? `/?developer=Pavlo&${queryString.stringify(args.query)}` : '')
   );
 }
 

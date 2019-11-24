@@ -1,17 +1,21 @@
-import * as taskService from 'src/services/taskService';
-import { FETCH_TASKS, FETCH_TASKS_LOADING } from '../../actionTypes/index';
+import * as taskService from '../../services/taskService';
+import { fetchTasks, SORT_TASKS } from '../../routines/index';
 
-const fetchtTasksAction = (tasks) => ({
-  type: FETCH_TASKS,
-  payload: tasks
+export const sortTasks = (column, direction = 'ascending') => ({
+  type: SORT_TASKS,
+  payload: {
+    column,
+    direction
+  }
 });
 
-const fetchtTasksLoadingAction = () => ({
-  type: FETCH_TASKS_LOADING
-});
-
-export const fetchPosts = (filter) => async (dispatch) => {
-  dispatch(fetchtTasksLoadingAction());
-  const { message } = await taskService.getTasks(filter);
-  dispatch(fetchtTasksAction(message));
+export const fetchTasksRequest = (filter) => async (dispatch) => {
+  dispatch(fetchTasks.request());
+  const { status, message } = await taskService.getTasks(filter);
+  if (status === 'ok') {
+    dispatch(fetchTasks.success(message));
+  } else {
+    dispatch(fetchTasks.failure(message));
+  }
+  dispatch(fetchTasks.fulfill());
 };

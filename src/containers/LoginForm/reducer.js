@@ -1,7 +1,7 @@
-import { createTask } from '../../routines/index';
+import { login } from '../../routines/index';
 
 const initialState = {
-  editingDescription: '',
+  isAuthorized: false,
   response: null,
   loading: false,
   error: null
@@ -9,22 +9,23 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case createTask.REQUEST:
+    case login.REQUEST:
       return {
         ...state,
         loading: true
       };
-    case createTask.SUCCESS:
+    case login.SUCCESS:
       return {
         ...state,
-        response: action.payload
+        response: action.payload,
+        isAuthorized: true
       };
-    case createTask.FAILURE:
+    case login.FAILURE:
       return {
         ...state,
         error: action.payload
       };
-    case createTask.FULFILL:
+    case login.FULFILL:
       return {
         ...state,
         loading: false

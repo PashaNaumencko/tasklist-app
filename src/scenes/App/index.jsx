@@ -1,12 +1,12 @@
 
 import React from 'react';
 import { Provider } from 'react-redux';
-import MainContainer from 'src/containers/MainContainer';
+import Routing from 'src/containers/Routing';
 import store from 'src/store';
 
 const App = () => (
   <Provider store={store}>
-    <MainContainer />
+    <Routing />
   </Provider>
 );
 

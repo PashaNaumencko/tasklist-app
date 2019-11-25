@@ -4,7 +4,9 @@ function getFetchUrl(args) {
   const developer = 'Pavlo';
   const apiUrl = 'https://uxcandy.com/~shapoval/test-task-backend/v2';
   return (
-    apiUrl + args.endpoint + (args.query ? `/?${queryString.stringify({ ...args.query, developer })}` : `/?developer=${developer}`)
+    apiUrl + args.endpoint + (args.query
+      ? `/?${queryString.stringify({ ...args.query, developer })}`
+      : `/?developer=${developer}`)
   );
 }
 
@@ -12,22 +14,14 @@ function getFetchArgs(args) {
   const headers = {
     'Content-Type': 'application/json'
   };
-  // headers.Accept = 'application/json';
-  const token = localStorage.getItem('token');
-  if (token && !args.skipAuthorization) {
-    headers.Authorization = `Bearer ${token}`;
-  }
   let body;
   if (args.request) {
     if (args.type === 'GET') {
       throw new Error('GET request does not support request body.');
     }
-    headers['Content-Type'] = 'multipart/form-data';
+    delete headers['Content-Type'];
     const formData = new FormData();
-    Object.keys(args.request).forEach((arg) => {
-      console.log(arg, args.request[arg]);
-      formData.append(`${arg}`, `${args.request[arg]}`);
-    });
+    Object.keys(args.request).forEach((arg) => formData.append(`${arg}`, `${args.request[arg]}`));
     body = formData;
   }
   return {

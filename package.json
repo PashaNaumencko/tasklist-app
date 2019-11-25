@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "formik": "^2.0.6",
+    "history": "^4.10.1",
     "lodash.sortby": "^4.7.0",
     "node-sass": "^4.13.0",
     "prop-types": "^15.7.2",

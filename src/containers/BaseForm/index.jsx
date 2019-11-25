@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import validator from 'validator';
 import PropTypes from 'prop-types';
-import { Segment, Button, Icon, Header, Form } from 'semantic-ui-react';
+import { Segment, Button, Header, Form } from 'semantic-ui-react';
 import { createTaskRequest } from './actions';
 
 class BaseForm extends React.Component {
@@ -38,7 +38,6 @@ class BaseForm extends React.Component {
     return emailError;
   };
 
-
   validateDescription = () => {
     const { description } = this.state;
     const descriptionError = validator.isEmpty(description) ? 'Required' : null;
@@ -57,18 +56,20 @@ class BaseForm extends React.Component {
   onSubmit = () => {
     if (this.validateForm()) {
       const { username, email, description } = this.state;
-      console.log({ username, email, description }, 'submit');
-      this.props.createTaskRequest({ username, email, text: description });
+      this.props.createTaskRequest({ username, email, text: description, resetForm: this.resetForm });
     }
   }
 
+  resetForm = () => this.setState({ username: '', email: '', description: '' });
+
   render() {
     const { usernameError, emailError, descriptionError } = this.state;
+    const { loading } = this.props;
 
     return (
       <Segment padded>
-        <Header as="h3" content="Create Task" textAlign="center" size="large" />
-        <Form size="huge">
+        <Header as="h3" content="Create Task" textAlign="center" />
+        <Form size="large">
           <Form.Group widths="equal">
             <Form.Input
               label="Username"
@@ -76,6 +77,7 @@ class BaseForm extends React.Component {
               error={usernameError}
               onBlur={this.validateUsername}
               onChange={this.onUsernameChange}
+              disabled={loading}
             />
             <Form.Input
               label="Email"
@@ -83,6 +85,7 @@ class BaseForm extends React.Component {
               error={emailError}
               onBlur={this.validateEmail}
               onChange={this.onEmailChange}
+              disabled={loading}
             />
           </Form.Group>
           <Form.TextArea
@@ -92,16 +95,18 @@ class BaseForm extends React.Component {
             error={descriptionError}
             onBlur={this.validateDescription}
             onChange={this.onDescriptionChange}
+            disabled={loading}
           />
-          <Button type="submit" content="Submit" size="huge" onClick={this.onSubmit} />
+          <Button type="submit" content="Submit" onClick={this.onSubmit} loading={loading} />
         </Form>
       </Segment>
     );
   }
 }
 
-const mapStateToProps = ({ baseFormData: { loading } }) => ({
-  loading
+const mapStateToProps = ({ baseFormData: { loading, editingDescription } }) => ({
+  loading,
+  editingDescription
 });
 
 const mapDispatchToProps = {

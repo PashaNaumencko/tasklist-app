@@ -98,7 +98,7 @@ class TaskList extends React.Component {
                 </Table.Cell>
                 <Table.Cell>{task.username}</Table.Cell>
                 <Table.Cell>{task.email}</Table.Cell>
-                <Table.Cell>{task.description}</Table.Cell>
+                <Table.Cell>{task.text}</Table.Cell>
                 <Table.Cell>{task.status}</Table.Cell>
                 <Table.Cell textAlign="center">
                   <Button
@@ -120,7 +120,7 @@ class TaskList extends React.Component {
                     activePage={activePage}
                     firstItem={null}
                     lastItem={null}
-                    totalPages={Math.round(totalTaskCount / 3)}
+                    totalPages={Math.ceil(totalTaskCount / 3)}
                     onPageChange={this.onPaginationChange}
                   />
                 ) : (

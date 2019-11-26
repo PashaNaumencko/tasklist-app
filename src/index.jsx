@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import App from './scenes/App';
+import App from './components/App';
 
 import './styles/reset.scss';
 import 'semantic-ui-css/semantic.min.css';

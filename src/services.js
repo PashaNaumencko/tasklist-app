@@ -1,5 +1,14 @@
 import callWebApi from 'src/helpers/webApiHelper';
 
+export const login = async (request) => {
+  const response = await callWebApi({
+    endpoint: '/login',
+    type: 'POST',
+    request,
+  });
+  return response.json();
+};
+
 export const getTasks = async (filter) => {
   const response = await callWebApi({
     endpoint: '/',
@@ -18,11 +27,10 @@ export const createTask = async (request) => {
   return response.json();
 };
 
-export const editTask = async (request) => {
-  const { id } = request;
+export const editTask = async (id, request) => {
   const response = await callWebApi({
     endpoint: `/edit/${id}`,
-    type: 'PUT',
+    type: 'POST',
     request
   });
   return response.json();

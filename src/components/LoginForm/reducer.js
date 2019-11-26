@@ -2,7 +2,7 @@ import { login } from '../../routines/index';
 
 const initialState = {
   isAuthorized: false,
-  response: null,
+  response: {},
   loading: false,
   error: null
 };

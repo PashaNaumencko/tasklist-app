@@ -96,6 +96,12 @@ class LoginForm extends React.Component {
   }
 }
 
+LoginForm.propTypes = {
+  loading: PropTypes.bool,
+  loginRequest: PropTypes.func,
+  history: PropTypes.object
+};
+
 const mapStateToProps = ({ authData: { loading } }) => ({
   loading
 });

@@ -4,9 +4,11 @@ import PropTypes from 'prop-types';
 import { Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import { Container, Segment, Button, Icon, Header, Grid } from 'semantic-ui-react';
+import { NotificationContainer } from 'react-notifications';
 import MainContainer from '../MainContainer';
 import LoginForm from '../LoginForm';
 
+import 'react-notifications/lib/notifications.css';
 
 const history = createBrowserHistory();
 
@@ -61,8 +63,13 @@ const Routing = ({ isAuthorized }) => (
         <Route exact path="/login" component={LoginForm} />
       </Switch>
     </Router>
+    <NotificationContainer />
   </Container>
 );
+
+Routing.propTypes = {
+  isAuthorized: PropTypes.bool
+};
 
 const mapStateToProps = ({ authData: { isAuthorized } }) => ({
   isAuthorized

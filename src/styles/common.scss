@@ -3,3 +3,7 @@ body {
     padding: 0;
     background-color: #f6f6f6;
 }
+
+.ui.container .ui.segment {
+  min-height: 100px;
+}

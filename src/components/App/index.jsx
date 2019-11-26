@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { Provider } from 'react-redux';
-import Routing from 'src/containers/Routing';
-import store from 'src/store';
+import store from '../../store';
+import Routing from '../Routing';
 
 const App = () => (
   <Provider store={store}>

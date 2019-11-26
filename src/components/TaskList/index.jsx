@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Segment, Button, Icon, Header, Table, Loader, Pagination, Checkbox } from 'semantic-ui-react';
-import { fetchTasksRequest, sortTasks } from './actions';
+import { fetchTasksRequest, sortTasks, setEditingTask } from './actions';
+import * as services from '../../services';
 
 
 class TaskList extends React.Component {
@@ -22,8 +23,22 @@ class TaskList extends React.Component {
     });
   }
 
-  onSetComplete = (id) => () => {
+  onEditTask = (task) => () => this.props.setEditingTask(task);
 
+  onSetComplete = ({ id, status }) => () => {
+    const { token } = this.props;
+    if (status.toString().includes('completed;')) {
+      services.editTask(id, { token, status: status.replace('completed;', '') });
+    } else {
+      services.editTask(id, { token, status: `completed;${status}` });
+    }
+  };
+
+  isComplete = ({ status }) => {
+    if (status.toString().includes('completed;')) {
+      return true;
+    }
+    return false;
   };
 
   onColumnSort = (clickedColumn) => () => {
@@ -41,25 +56,28 @@ class TaskList extends React.Component {
   };
 
   onPaginationChange = (event, { activePage }) => {
+    const { sortedColumn, sortingDirection } = this.state;
+    const { fetchTasksRequest } = this.props;
     this.setState({ activePage });
-    this.props.fetchTasksRequest({ page: activePage });
+    fetchTasksRequest({
+      page: activePage,
+      sortedColumn,
+      sortingDirection
+    });
   };
 
-  // onEditClick = (user) => () => this.props.setModalVisibility(true, user);
-
-  // onCancelClick = () => this.setState({ editingUserId: null });
 
   render() {
     const { activePage, sortedColumn, sortingDirection } = this.state;
-    const { tasks, loading, totalTaskCount } = this.props;
+    const { tasks, loading, totalTaskCount, isAuthorized } = this.props;
 
     return loading ? (
-      <div>
+      <Segment>
         <Loader active />
-      </div>
+      </Segment>
     ) : (
       <Segment>
-        <Table celled padded sortable singleLine size="large">
+        <Table celled padded compact sortable size="large">
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell />
@@ -90,10 +108,12 @@ class TaskList extends React.Component {
 
           <Table.Body>
             {tasks.map((task) => (
-              <Table.Row key={task.id}>
+              <Table.Row key={task.id} positive={this.isComplete(task)}>
                 <Table.Cell textAlign="center">
                   <Checkbox
-                    onChange={this.onSetComplete(task.id)}
+                    disabled={!isAuthorized}
+                    checked={this.isComplete(task)}
+                    onChange={this.onSetComplete(task)}
                   />
                 </Table.Cell>
                 <Table.Cell>{task.username}</Table.Cell>
@@ -104,7 +124,7 @@ class TaskList extends React.Component {
                   <Button
                     type="button"
                     icon={<Icon name="edit" />}
-                    // onClick={this.onEditClick(task)}
+                    onClick={this.onEditTask(task)}
                   />
                 </Table.Cell>
               </Table.Row>
@@ -118,8 +138,6 @@ class TaskList extends React.Component {
                   <Pagination
                     boundaryRange={0}
                     activePage={activePage}
-                    firstItem={null}
-                    lastItem={null}
                     totalPages={Math.ceil(totalTaskCount / 3)}
                     onPageChange={this.onPaginationChange}
                   />
@@ -135,15 +153,32 @@ class TaskList extends React.Component {
   }
 }
 
-const mapStateToProps = ({ taskListData: { tasks, loading, totalTaskCount } }) => ({
+TaskList.propTypes = {
+  tasks: PropTypes.array,
+  loading: PropTypes.bool,
+  isAuthorized: PropTypes.bool,
+  totalTaskCount: PropTypes.string,
+  token: PropTypes.string,
+  fetchTasksRequest: PropTypes.func,
+  sortTasks: PropTypes.func,
+  setEditingTask: PropTypes.func
+};
+
+
+const mapStateToProps = ({
+  taskListData: { tasks, loading, totalTaskCount },
+  authData: { isAuthorized, response: { token } } }) => ({
   tasks,
   loading,
-  totalTaskCount
+  totalTaskCount,
+  isAuthorized,
+  token
 });
 
 const mapDispatchToProps = {
   fetchTasksRequest,
-  sortTasks
+  sortTasks,
+  setEditingTask
 };
 
 export default connect(

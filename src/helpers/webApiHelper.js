@@ -5,8 +5,8 @@ function getFetchUrl(args) {
   const apiUrl = 'https://uxcandy.com/~shapoval/test-task-backend/v2';
   return (
     apiUrl + args.endpoint + (args.query
-      ? `/?${queryString.stringify({ ...args.query, developer })}`
-      : `/?developer=${developer}`)
+      ? `?${queryString.stringify({ ...args.query, developer })}`
+      : `?developer=${developer}`)
   );
 }
 

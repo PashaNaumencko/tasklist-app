@@ -6,9 +6,9 @@ import {
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import taskListData from './containers/TaskList/reducer';
-import baseFormData from './containers/BaseForm/reducer';
-import authData from './containers/LoginForm/reducer';
+import taskListData from './components/TaskList/reducer';
+import baseFormData from './components/BaseForm/reducer';
+import authData from './components/LoginForm/reducer';
 
 const initialState = {};
 

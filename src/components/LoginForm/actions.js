@@ -1,9 +1,9 @@
-import * as userService from '../../services/userService';
+import * as services from '../../services';
 import { login } from '../../routines/index';
 
 export const loginRequest = ({ username, password, push, showError }) => async (dispatch) => {
   dispatch(login.request());
-  const { status, message } = await userService.login({ username, password });
+  const { status, message } = await services.login({ username, password });
   if (status === 'ok') {
     dispatch(login.success(message));
     localStorage.setItem('token', message.token);

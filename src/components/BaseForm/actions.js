@@ -32,6 +32,6 @@ export const editTaskRequest = ({ id, text, resetForm }) => async (dispatch, get
   } else {
     dispatch(editTask.failure(message));
   }
-  dispatch(editTask.fulfill());
   resetForm();
+  dispatch(editTask.fulfill());
 };

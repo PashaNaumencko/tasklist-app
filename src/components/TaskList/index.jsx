@@ -13,7 +13,8 @@ class TaskList extends React.Component {
     this.state = {
       activePage: 1,
       sortedColumn: null,
-      sortingDirection: 'ascending'
+      sortingDirection: 'ascending',
+      completedTaskIds: []
     };
   }
 
@@ -23,23 +24,36 @@ class TaskList extends React.Component {
     });
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { tasks } = nextProps;
+    if (tasks && !prevState.completedTaskIds.length) {
+      const completedTaskIds = tasks.filter(({ status }) => status === 10).map(({ id }) => id);
+      return {
+        ...prevState,
+        completedTaskIds
+      };
+    }
+    return null;
+  }
+
   onEditTask = (task) => () => this.props.setEditingTask(task);
 
-  onSetComplete = ({ id, status }) => () => {
+  onSetComplete = (id) => () => {
     const { token } = this.props;
-    if (status.toString().includes('completed;')) {
-      services.editTask(id, { token, status: status.replace('completed;', '') });
+    if (this.isComplete(id)) {
+      this.setState((prevState) => ({
+        completedTaskIds: prevState.completedTaskIds.filter((taskId) => taskId !== id)
+      }));
+      services.editTask(id, { token, status: 0 });
     } else {
-      services.editTask(id, { token, status: `completed;${status}` });
+      this.setState((prevState) => ({
+        completedTaskIds: [...prevState.completedTaskIds, id]
+      }));
+      services.editTask(id, { token, status: 10 });
     }
   };
 
-  isComplete = ({ status }) => {
-    if (status.toString().includes('completed;')) {
-      return true;
-    }
-    return false;
-  };
+  isComplete = (id) => this.state.completedTaskIds.some((taskId) => taskId === id);
 
   onColumnSort = (clickedColumn) => () => {
     const { sortedColumn, sortingDirection } = this.state;
@@ -68,8 +82,10 @@ class TaskList extends React.Component {
 
 
   render() {
-    const { activePage, sortedColumn, sortingDirection } = this.state;
+    const { activePage, sortedColumn, sortingDirection, completedTaskIds } = this.state;
     const { tasks, loading, totalTaskCount, isAuthorized } = this.props;
+
+    console.log(completedTaskIds);
 
     return loading ? (
       <Segment>
@@ -108,12 +124,12 @@ class TaskList extends React.Component {
 
           <Table.Body>
             {tasks.map((task) => (
-              <Table.Row key={task.id} positive={this.isComplete(task)}>
+              <Table.Row key={task.id} positive={this.isComplete(task.id)}>
                 <Table.Cell textAlign="center">
                   <Checkbox
                     disabled={!isAuthorized}
-                    checked={this.isComplete(task)}
-                    onChange={this.onSetComplete(task)}
+                    checked={this.isComplete(task.id)}
+                    onChange={this.onSetComplete(task.id)}
                   />
                 </Table.Cell>
                 <Table.Cell>{task.username}</Table.Cell>

@@ -60,11 +60,7 @@ class LoginForm extends React.Component {
         alignItems: 'center'
       }}
       >
-        <Segment
-          padded
-          style={{ minWidth: 450 }}
-          centered
-        >
+        <Segment padded style={{ minWidth: 450 }}>
           <Header as="h3" content="Login" textAlign="center" />
           <Form size="big" error={loginError}>
             <Form.Input

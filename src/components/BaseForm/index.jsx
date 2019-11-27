@@ -24,15 +24,25 @@ class BaseForm extends React.Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { editingTask } = nextProps;
+    console.log(editingTask && !prevState.isSetDescription);
     if (editingTask && !prevState.isSetDescription) {
+      console.log('here 1');
       return {
         ...prevState,
         description: editingTask.text,
+        usernameError: null,
+        emailError: null,
         descriptionError: null,
         isSetDescription: true
       };
     }
-    return null;
+    console.log('here 2');
+    return {
+      ...prevState,
+      description: prevState.description,
+      // descriptionError: null,
+      isSetDescription: false
+    };
   }
 
   validateUsername = () => {
@@ -70,9 +80,9 @@ class BaseForm extends React.Component {
   validateForm = () => [!this.validateUsername(), !this.validateEmail(), !this.validateDescription()].every(Boolean);
 
   onSubmit = () => {
-    const { editingTask, isAuthorized } = this.props;
+    const { editingTask } = this.props;
     if (editingTask) {
-      if (!this.validateDescription() && isAuthorized) {
+      if (!this.validateDescription() && localStorage.getItem('token')) {
         const { description } = this.state;
         this.props.editTaskRequest({ id: editingTask.id, text: description, resetForm: this.resetForm });
       } else {
@@ -101,8 +111,6 @@ class BaseForm extends React.Component {
       descriptionError,
       authError } = this.state;
     const { loading, editingTask } = this.props;
-
-    console.log(this.state);
 
     return (
       <Segment padded>
@@ -145,7 +153,7 @@ class BaseForm extends React.Component {
             header="Auth Failed"
             content="You need to authenticate by admin."
           />
-          {editingTask ? <Button type="button" content="Cancel" onClick={this.onEditCancel} loading={loading} /> : null}
+          {editingTask ? <Button secondary type="button" content="Cancel" onClick={this.onEditCancel} /> : null}
           <Button type="submit" content="Submit" onClick={this.onSubmit} loading={loading} />
         </Form>
       </Segment>
@@ -156,16 +164,14 @@ class BaseForm extends React.Component {
 BaseForm.propTypes = {
   editingTask: PropTypes.object,
   loading: PropTypes.bool,
-  isAuthorized: PropTypes.bool,
   createTaskRequest: PropTypes.func,
   editTaskRequest: PropTypes.func,
   setEditingTask: PropTypes.func
 };
 
-const mapStateToProps = ({ baseFormData: { loading, editingTask }, authData: { isAuthorized } }) => ({
+const mapStateToProps = ({ baseFormData: { loading, editingTask } }) => ({
   loading,
-  editingTask,
-  isAuthorized
+  editingTask
 });
 
 const mapDispatchToProps = {

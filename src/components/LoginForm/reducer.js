@@ -1,4 +1,4 @@
-import { login } from '../../routines/index';
+import { login, LOG_OUT, SET_AUTH } from '../../routines/index';
 
 const initialState = {
   isAuthorized: false,
@@ -14,6 +14,7 @@ export default (state = initialState, action) => {
         ...state,
         loading: true
       };
+    case SET_AUTH:
     case login.SUCCESS:
       return {
         ...state,
@@ -29,6 +30,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         loading: false
+      };
+    case LOG_OUT:
+      return {
+        ...state,
+        isAuthorized: false,
+        response: {}
       };
     default:
       return state;

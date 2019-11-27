@@ -5,7 +5,6 @@ import { Segment, Button, Icon, Header, Table, Loader, Pagination, Checkbox } fr
 import { fetchTasksRequest, sortTasks, setEditingTask } from './actions';
 import * as services from '../../services';
 
-
 class TaskList extends React.Component {
   constructor(props) {
     super(props);
@@ -26,7 +25,7 @@ class TaskList extends React.Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { tasks } = nextProps;
-    if (tasks && !prevState.completedTaskIds.length) {
+    if (tasks && tasks.some(({ status }) => status === 10) && !prevState.completedTaskIds.length) {
       const completedTaskIds = tasks.filter(({ status }) => status === 10).map(({ id }) => id);
       return {
         ...prevState,
@@ -42,7 +41,7 @@ class TaskList extends React.Component {
     const { token } = this.props;
     if (this.isComplete(id)) {
       this.setState((prevState) => ({
-        completedTaskIds: prevState.completedTaskIds.filter((taskId) => taskId !== id)
+          completedTaskIds: prevState.completedTaskIds.filter((taskId) => taskId !== id)
       }));
       services.editTask(id, { token, status: 0 });
     } else {
@@ -82,10 +81,8 @@ class TaskList extends React.Component {
 
 
   render() {
-    const { activePage, sortedColumn, sortingDirection, completedTaskIds } = this.state;
+    const { activePage, sortedColumn, sortingDirection } = this.state;
     const { tasks, loading, totalTaskCount, isAuthorized } = this.props;
-
-    console.log(completedTaskIds);
 
     return loading ? (
       <Segment>

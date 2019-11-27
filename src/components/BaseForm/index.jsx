@@ -17,33 +17,44 @@ class BaseForm extends React.Component {
       usernameError: null,
       emailError: null,
       descriptionError: null,
-      authError: false,
-      isSetDescription: false
+      authError: false
     };
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const { editingTask } = nextProps;
-    console.log(editingTask && !prevState.isSetDescription);
-    if (editingTask && !prevState.isSetDescription) {
-      console.log('here 1');
-      return {
-        ...prevState,
+  componentDidUpdate(prevProps) {
+    const { editingTask } = this.props;
+    if (editingTask && !prevProps.editingTask) {
+      this.setState({
         description: editingTask.text,
         usernameError: null,
         emailError: null,
-        descriptionError: null,
-        isSetDescription: true
-      };
+        descriptionError: null
+      });
     }
-    console.log('here 2');
-    return {
-      ...prevState,
-      description: prevState.description,
-      // descriptionError: null,
-      isSetDescription: false
-    };
   }
+
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   const { editingTask } = nextProps;
+  //   console.log(editingTask && !prevState.isSetDescription);
+  //   if (editingTask && !prevState.isSetDescription) {
+  //     console.log('here 1');
+  //     return {
+  //       ...prevState,
+  //       description: editingTask.text,
+  //       usernameError: null,
+  //       emailError: null,
+  //       descriptionError: null,
+  //       isSetDescription: true
+  //     };
+  //   }
+  //   console.log('here 2');
+  //   return {
+  //     ...prevState,
+  //     description: prevState.description || '',
+  //     descriptionError: null,
+  //     isSetDescription: false
+  //   };
+  // }
 
   validateUsername = () => {
     const { username } = this.state;
@@ -95,7 +106,7 @@ class BaseForm extends React.Component {
   };
 
   onEditCancel = () => {
-    this.setState({ authError: false });
+    this.setState({ description: '', descriptionError: null, authError: false });
     this.props.setEditingTask(null);
   }
 

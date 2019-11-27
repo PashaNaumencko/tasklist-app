@@ -2,7 +2,7 @@
   "name": "task-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://pashanaumencko.github.io/tasklist-app",
+  "homepage": "https://pashanaumencko.github.io/tasklist-app",
   "dependencies": {
     "history": "^4.10.1",
     "lodash.sortby": "^4.7.0",

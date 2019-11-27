@@ -33,29 +33,6 @@ class BaseForm extends React.Component {
     }
   }
 
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   const { editingTask } = nextProps;
-  //   console.log(editingTask && !prevState.isSetDescription);
-  //   if (editingTask && !prevState.isSetDescription) {
-  //     console.log('here 1');
-  //     return {
-  //       ...prevState,
-  //       description: editingTask.text,
-  //       usernameError: null,
-  //       emailError: null,
-  //       descriptionError: null,
-  //       isSetDescription: true
-  //     };
-  //   }
-  //   console.log('here 2');
-  //   return {
-  //     ...prevState,
-  //     description: prevState.description || '',
-  //     descriptionError: null,
-  //     isSetDescription: false
-  //   };
-  // }
-
   validateUsername = () => {
     const { username } = this.state;
     const usernameError = validator.isEmpty(username) ? 'Required' : null;
@@ -96,6 +73,7 @@ class BaseForm extends React.Component {
       if (!this.validateDescription() && localStorage.getItem('token')) {
         const { description } = this.state;
         this.props.editTaskRequest({ id: editingTask.id, text: description, resetForm: this.resetForm });
+        this.setState({ authError: false });
       } else {
         this.setState({ authError: true });
       }

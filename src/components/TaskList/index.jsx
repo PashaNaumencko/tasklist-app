@@ -41,7 +41,7 @@ class TaskList extends React.Component {
     const { token } = this.props;
     if (this.isComplete(id)) {
       this.setState((prevState) => ({
-          completedTaskIds: prevState.completedTaskIds.filter((taskId) => taskId !== id)
+        completedTaskIds: prevState.completedTaskIds.filter((taskId) => taskId !== id)
       }));
       services.editTask(id, { token, status: 0 });
     } else {

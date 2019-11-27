@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import { Container, Segment, Button, Icon, Header, Grid } from 'semantic-ui-react';
 import { NotificationContainer } from 'react-notifications';
@@ -12,10 +12,9 @@ import { logout, setAuth } from '../LoginForm/actions';
 
 import 'react-notifications/lib/notifications.css';
 
-const history = createBrowserHistory();
+const history = createBrowserHistory({ basename: 'https://pashanaumencko.github.io/tasklist-app' });
 
 const Routing = ({ isAuthorized, setEditingTask, logout, setAuth }) => {
-
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -34,7 +33,7 @@ const Routing = ({ isAuthorized, setEditingTask, logout, setAuth }) => {
 
   return (
     <Container>
-      <Router history={history}>
+      <Router history={history} basename="https://pashanaumencko.github.io/tasklist-app">
         <Segment>
           <Grid>
             <Grid.Column width="8" style={{ display: 'flex', alignItems: 'center' }}>
@@ -82,11 +81,13 @@ const Routing = ({ isAuthorized, setEditingTask, logout, setAuth }) => {
       <NotificationContainer />
     </Container>
   );
-}
+};
 
 Routing.propTypes = {
   isAuthorized: PropTypes.bool,
-  setEditingTask: PropTypes.func
+  setEditingTask: PropTypes.func,
+  logout: PropTypes.func,
+  setAuth: PropTypes.func
 };
 
 const mapStateToProps = ({ authData: { isAuthorized } }) => ({

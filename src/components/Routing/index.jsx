@@ -12,7 +12,7 @@ import { logout, setAuth } from '../LoginForm/actions';
 
 import 'react-notifications/lib/notifications.css';
 
-const history = createBrowserHistory({ basename: 'https://pashanaumencko.github.io/tasklist-app' });
+const history = createBrowserHistory();
 
 const Routing = ({ isAuthorized, setEditingTask, logout, setAuth }) => {
   useEffect(() => {
@@ -33,7 +33,7 @@ const Routing = ({ isAuthorized, setEditingTask, logout, setAuth }) => {
 
   return (
     <Container>
-      <Router history={history} basename="https://pashanaumencko.github.io/tasklist-app">
+      <Router history={history}>
         <Segment>
           <Grid>
             <Grid.Column width="8" style={{ display: 'flex', alignItems: 'center' }}>

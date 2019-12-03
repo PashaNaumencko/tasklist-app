@@ -15,12 +15,12 @@ import 'react-notifications/lib/notifications.css';
 const history = createBrowserHistory();
 
 const Routing = ({ isAuthorized, setEditingTask, logout, setAuth }) => {
+  const token = localStorage.getItem('token');
   useEffect(() => {
-    const token = localStorage.getItem('token');
     if (token) {
       setAuth(token);
     }
-  });
+  }, [setAuth, token]);
 
   const onLoginClick = () => {
     setEditingTask(null);
